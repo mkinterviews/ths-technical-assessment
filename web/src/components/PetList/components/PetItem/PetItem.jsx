@@ -1,11 +1,13 @@
 import React from "react";
 
-import "./PetItem.css";
 import dog from "./assets/PetsPlaceholder/Dog.svg";
+import { Text } from "../../../Text/Text";
 
-const PetItem = ({ pet }) => {
-  const { name, type, feeds } = pet;
-  const imageUrl = pet.imageUrl || dog;
+import "./PetItem.css";
+
+const PetItem = ({ pet, isLoading }) => {
+  const { name, type, feeds } = pet || {};
+  const imageUrl = pet?.imageUrl || dog;
   return (
     <div className="Pet-item">
       <div>
@@ -13,16 +15,18 @@ const PetItem = ({ pet }) => {
       </div>
       <div>
         <div>
-          <span className="Pet-details-label">Name: </span>
-          <span>{name}</span>
+          <Text className="Pet-details-label">Name: </Text>
+          <Text isLoading={isLoading}>{name}</Text>
         </div>
         <div>
-          <span className="Pet-details-label">Animal Type: </span>
-          <span>{type}</span>
+          <Text className="Pet-details-label">Animal Type: </Text>
+          <Text isLoading={isLoading}>{type}</Text>
         </div>
         <div>
-          <span className="Pet-details-label">Number of feeds: </span>
-          <span>{feeds}</span>
+          <Text className="Pet-details-label">Number of feeds: </Text>
+          <Text isLoading={isLoading} loadingText="0">
+            {feeds}
+          </Text>
         </div>
       </div>
     </div>

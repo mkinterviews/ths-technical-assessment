@@ -1,7 +1,7 @@
 import { render } from "@testing-library/react";
+import { useQueryStates } from "nuqs";
 import useSWR from "swr";
 import { vi } from "vitest";
-import { useQueryStates } from "nuqs";
 
 import PetList from "./PetList";
 
@@ -9,6 +9,30 @@ vi.mock("swr");
 vi.mock("nuqs");
 
 useQueryStates.mockReturnValue([{}, vi.fn()]);
+
+const testData = [
+  {
+    id: 0,
+    name: "Woofo",
+    type: "Rock",
+    age: 14,
+    feeds: 5,
+  },
+  {
+    id: 1,
+    name: "The Whiskertron",
+    type: "Antelope",
+    age: 5,
+    feeds: 3,
+  },
+  {
+    id: 2,
+    name: "Dogbert",
+    type: "Rock",
+    age: 12,
+    feeds: 2,
+  },
+];
 
 test("renders empty state when no pets returned", () => {
   useSWR.mockReturnValue({
@@ -57,29 +81,7 @@ test("renders a generic error when the API fails", () => {
 
 test("renders data in the order retreived by the API", () => {
   useSWR.mockReturnValue({
-    data: [
-      {
-        id: 0,
-        name: "Woofo",
-        type: "Rock",
-        age: 14,
-        feeds: 5,
-      },
-      {
-        id: 1,
-        name: "The Whiskertron",
-        type: "Antelope",
-        age: 5,
-        feeds: 3,
-      },
-      {
-        id: 2,
-        name: "Dogbert",
-        type: "Rock",
-        age: 12,
-        feeds: 2,
-      },
-    ],
+    data: testData,
   });
 
   const { getByRole, getAllByRole } = render(<PetList />);
@@ -92,4 +94,47 @@ test("renders data in the order retreived by the API", () => {
   expect(petsItems[0]).toHaveTextContent("Woofo");
   expect(petsItems[1]).toHaveTextContent("Whiskertron");
   expect(petsItems[2]).toHaveTextContent("Dogbert");
+});
+
+test("renders data filtered by search queries", async () => {
+  useSWR.mockReturnValue({
+    data: testData,
+  });
+  useQueryStates.mockReturnValue([{ q: "Whisker" }, vi.fn()]);
+
+  const { getAllByRole } = render(<PetList />);
+
+  const petsItems = getAllByRole("listitem");
+
+  expect(petsItems).toHaveLength(1);
+  expect(petsItems[0]).toHaveTextContent("Whiskertron");
+});
+
+test("renders data filtered by type", async () => {
+  useSWR.mockReturnValue({
+    data: testData,
+  });
+  useQueryStates.mockReturnValue([{ type: "Rock" }, vi.fn()]);
+
+  const { getAllByRole } = render(<PetList />);
+
+  const petsItems = getAllByRole("listitem");
+
+  expect(petsItems).toHaveLength(2);
+  expect(petsItems[0]).toHaveTextContent("Woofo");
+  expect(petsItems[1]).toHaveTextContent("Dogbert");
+});
+
+test("renders data filtered by query and type", async () => {
+  useSWR.mockReturnValue({
+    data: testData,
+  });
+  useQueryStates.mockReturnValue([{ q: "BeRt", type: "Rock" }, vi.fn()]);
+
+  const { getAllByRole } = render(<PetList />);
+
+  const petsItems = getAllByRole("listitem");
+
+  expect(petsItems).toHaveLength(1);
+  expect(petsItems[0]).toHaveTextContent("Dogbert");
 });

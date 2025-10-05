@@ -1,29 +1,33 @@
 import { PET_TYPES } from "../../../../mocks/generatePets";
+import { SearchInput } from "../../../SearchInput/SearchInput";
+import { Select } from "../../../Select/Select";
 
 import "./PetFilters.css";
 
 export const PetFilters = ({ filters, setFilters }) => {
   return (
     <div className="PetFilters">
-      <input
-        aria-label="Search"
+      <SearchInput
+        label="Search"
         value={filters["q"]}
-        onChange={(e) =>
-          setFilters((filters) => ({ ...filters, q: e.target.value }))
+        onChange={(value) =>
+          setFilters((filters) => ({ ...filters, q: value }))
         }
       />
-      <select
-        aria-label="Type"
+      <Select
+        label="Type"
         value={filters["type"]}
-        onChange={(e) =>
-          setFilters((filters) => ({ ...filters, type: e.target.value }))
+        onChange={(value) =>
+          setFilters((filters) => ({ ...filters, type: value }))
         }
       >
         <option value="">All types</option>
         {PET_TYPES.map((type) => (
-          <option>{type}</option>
+          <option key={type} value={type}>
+            {type}
+          </option>
         ))}
-      </select>
+      </Select>
     </div>
   );
 };

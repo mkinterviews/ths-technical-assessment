@@ -1,16 +1,14 @@
-import React from "react";
 import useSWR from "swr";
 
-import PetItem from "./components/PetItem";
 import { ErrorMessage } from "../ErrorMessage/ErrorMessage";
+import PetItem from "./components/PetItem";
+import { PetListFilters } from "./components/PetListFilters/PetListFIlters";
+import { usePetFilters } from "./components/PetListFilters/usePetFilters";
 
 import "./PetList.css";
 
 const PetList = () => {
-  const { data, isLoading, error } = useSWR("/api/pets", async (key) => {
-    const response = await fetch(key);
-    return await response.json();
-  });
+  const { data, isLoading, error } = useSWR("/api/pets");
 
   if (error) {
     return <ErrorMessage title="Unable to find pets" error={error} />;
@@ -45,8 +43,9 @@ const PetList = () => {
   return (
     <>
       <h1 className="Pets-title">My Pets</h1>
+      <PetListFilters filters={filters} setFilters={setFilters} />
       <ul className="PetList">
-        {data?.map((pet) => {
+        {data.map((pet) => {
           return (
             <li key={pet.id}>
               <PetItem key={pet.id} pet={pet} />

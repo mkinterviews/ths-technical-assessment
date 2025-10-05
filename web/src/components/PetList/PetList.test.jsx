@@ -41,7 +41,7 @@ test("renders a generic error when the API fails", () => {
     error: new Error("500: Unable to retrieve data"),
   });
 
-  const { queryByRole, getByRole, debug } = render(<PetList />);
+  const { queryByRole, getByRole } = render(<PetList />);
 
   const petsList = queryByRole("list");
   expect(petsList).not.toBeInTheDocument();

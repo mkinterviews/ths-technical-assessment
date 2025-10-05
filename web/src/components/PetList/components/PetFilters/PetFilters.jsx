@@ -1,8 +1,10 @@
 import { PET_TYPES } from "../../../../mocks/generatePets";
 
+import "./PetFilters.css";
+
 export const PetFilters = ({ filters, setFilters }) => {
   return (
-    <div>
+    <div className="PetFilters">
       <input
         aria-label="Search"
         value={filters["q"]}

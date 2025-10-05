@@ -35,3 +35,42 @@ test("renders skeleton loading states when request loading", () => {
   // The loading skeleton should show three items
   expect(getAllByRole("listitem")).toHaveLength(3);
 });
+
+test("renders data in the order retreived by the API", () => {
+  useSWR.mockReturnValue({
+    data: [
+      {
+        id: 0,
+        name: "Woofo",
+        type: "Rock",
+        age: 14,
+        feeds: 5,
+      },
+      {
+        id: 1,
+        name: "The Whiskertron",
+        type: "Antelope",
+        age: 5,
+        feeds: 3,
+      },
+      {
+        id: 2,
+        name: "Dogbert",
+        type: "Rock",
+        age: 12,
+        feeds: 2,
+      },
+    ],
+  });
+
+  const { getByRole, getAllByRole } = render(<PetList />);
+
+  const petsList = getByRole("list");
+  expect(petsList).not.toHaveAttribute("aria-busy", "true");
+
+  const petsItems = getAllByRole("listitem");
+  expect(petsItems).toHaveLength(3);
+  expect(petsItems[0]).toHaveTextContent("Woofo");
+  expect(petsItems[1]).toHaveTextContent("Whiskertron");
+  expect(petsItems[2]).toHaveTextContent("Dogbert");
+});

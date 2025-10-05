@@ -5,7 +5,7 @@
   font-family: "Georgia, Times,'Times New Roman', serif";
 }
 
-.PetList > li {
+.PetList {
   list-style-type: none;
   padding: 0;
 }

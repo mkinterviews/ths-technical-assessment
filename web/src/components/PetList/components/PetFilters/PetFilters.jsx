@@ -1,6 +1,6 @@
 import { PET_TYPES } from "../../../../mocks/generatePets";
 
-export const PetListFilters = ({ filters, setFilters }) => {
+export const PetFilters = ({ filters, setFilters }) => {
   return (
     <div>
       <input

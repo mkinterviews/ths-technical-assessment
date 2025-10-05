@@ -1,11 +1,15 @@
 import useSWR from "swr";
 
 import { ErrorMessage } from "../ErrorMessage/ErrorMessage";
+import { usePetFilters } from "./components/PetFilters/usePetFilters";
+import { PetFilters } from "./components/PetFilters/PetFilters";
 import PetItem from "./components/PetItem";
 
 import "./PetList.css";
 
 const PetList = () => {
+  const [filters, setFilters] = usePetFilters();
+
   const { data, isLoading, error } = useSWR("/api/pets");
 
   if (error) {
@@ -41,14 +45,25 @@ const PetList = () => {
   return (
     <>
       <h1 className="Pets-title">My Pets</h1>
+      <PetFilters filters={filters} setFilters={setFilters} />
       <ul className="PetList">
-        {data.map((pet) => {
-          return (
-            <li key={pet.id}>
-              <PetItem key={pet.id} pet={pet} />
-            </li>
-          );
-        })}
+        {data
+          .filter((pet) => {
+            return (
+              !filters["q"] ||
+              pet.name.toLowerCase().includes(filters["q"].toLowerCase())
+            );
+          })
+          .filter((pet) => {
+            return !filters["type"] || pet.type === filters["type"];
+          })
+          .map((pet) => {
+            return (
+              <li key={pet.id}>
+                <PetItem key={pet.id} pet={pet} />
+              </li>
+            );
+          })}
       </ul>
     </>
   );

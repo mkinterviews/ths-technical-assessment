@@ -1,10 +1,14 @@
-import React from "react";
 import { render } from "@testing-library/react";
-import PetList from "./PetList";
 import useSWR from "swr";
 import { vi } from "vitest";
+import { useQueryStates } from "nuqs";
+
+import PetList from "./PetList";
 
 vi.mock("swr");
+vi.mock("nuqs");
+
+useQueryStates.mockReturnValue([{}, vi.fn()]);
 
 test("renders empty state when no pets returned", () => {
   useSWR.mockReturnValue({

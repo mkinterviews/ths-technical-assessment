@@ -1,8 +1,6 @@
-import React from "react";
 import { render } from "@testing-library/react";
-import { describe, test, expect, vi } from "vitest";
+import { describe, expect, test } from "vitest";
 import { ErrorMessage } from "./ErrorMessage";
-import * as utils from "./utils";
 
 describe("ErrorMessage", () => {
   test("renders error message without title", () => {

@@ -1,5 +1,5 @@
 import { render } from "@testing-library/react";
-import { useQueryStates } from "nuqs";
+import { useQueryState } from "nuqs";
 import useSWR from "swr";
 import { vi } from "vitest";
 
@@ -8,7 +8,7 @@ import PetList from "./PetList";
 vi.mock("swr");
 vi.mock("nuqs");
 
-useQueryStates.mockReturnValue([{}, vi.fn()]);
+useQueryState.mockReturnValue([undefined, vi.fn()]);
 
 const testData = [
   {
@@ -100,7 +100,13 @@ test("renders data filtered by search queries", async () => {
   useSWR.mockReturnValue({
     data: testData,
   });
-  useQueryStates.mockReturnValue([{ q: "Whisker" }, vi.fn()]);
+  useQueryState.mockImplementation((param) => {
+    if (param === "q") {
+      return ["whisk", vi.fn()];
+    }
+
+    return [undefined, vi.fn()];
+  });
 
   const { getAllByRole } = render(<PetList />);
 
@@ -114,7 +120,13 @@ test("renders data filtered by type", async () => {
   useSWR.mockReturnValue({
     data: testData,
   });
-  useQueryStates.mockReturnValue([{ type: "Rock" }, vi.fn()]);
+  useQueryState.mockImplementation((param) => {
+    if (param === "type") {
+      return ["Rock", vi.fn()];
+    }
+
+    return [undefined, vi.fn()];
+  });
 
   const { getAllByRole } = render(<PetList />);
 
@@ -129,7 +141,17 @@ test("renders data filtered by query and type", async () => {
   useSWR.mockReturnValue({
     data: testData,
   });
-  useQueryStates.mockReturnValue([{ q: "BeRt", type: "Rock" }, vi.fn()]);
+  useQueryState.mockImplementation((param) => {
+    if (param === "q") {
+      return ["BeRt", vi.fn()];
+    }
+
+    if (param === "type") {
+      return ["Rock", vi.fn()];
+    }
+
+    return [undefined, vi.fn()];
+  });
 
   const { getAllByRole } = render(<PetList />);
 
@@ -143,10 +165,15 @@ test("renders No pets found when filters don't return any results", async () => 
   useSWR.mockReturnValue({
     data: testData,
   });
-  useQueryStates.mockReturnValue([
-    { q: "someunknownquery", type: "Rock" },
-    vi.fn(),
-  ]);
+  useQueryState.mockImplementation((param) => {
+    if (param === "q") {
+      return ["someunknownthing"];
+    }
+
+    if (param === "type") {
+      return "Dog";
+    }
+  });
 
   const { getByRole } = render(<PetList />);
 

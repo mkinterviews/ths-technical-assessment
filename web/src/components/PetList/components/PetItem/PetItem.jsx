@@ -8,15 +8,22 @@ import "./PetItem.css";
 const PetItem = ({ pet, isLoading }) => {
   const { name, type, feeds } = pet || {};
   const imageUrl = pet?.imageUrl || dog;
+  const ariaLabel = pet?.name ? `pet-${pet.name}` : undefined;
   return (
-    <div className="Pet-item">
+    <article
+      className="Pet-item"
+      aria-labelledby={`${ariaLabel}-name`}
+      aria-busy={isLoading ? "true" : undefined}
+    >
       <div>
         <img src={imageUrl} className="Pet-image" alt="pet" />
       </div>
       <div>
         <div>
           <Text className="Pet-details-label">Name: </Text>
-          <Text isLoading={isLoading}>{name}</Text>
+          <Text id={`${ariaLabel}-name`} isLoading={isLoading}>
+            {name}
+          </Text>
         </div>
         <div>
           <Text className="Pet-details-label">Animal Type: </Text>
@@ -29,7 +36,7 @@ const PetItem = ({ pet, isLoading }) => {
           </Text>
         </div>
       </div>
-    </div>
+    </article>
   );
 };
 

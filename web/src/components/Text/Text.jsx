@@ -9,6 +9,7 @@ export const Text = (props) => {
       <span
         {...spanProps}
         className={classnames(spanProps.className, "Text-skeleton")}
+        role="status"
         aria-busy="true"
       >
         {loadingText}

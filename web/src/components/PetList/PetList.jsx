@@ -2,8 +2,6 @@ import useSWR from "swr";
 
 import { ErrorMessage } from "../ErrorMessage/ErrorMessage";
 import PetItem from "./components/PetItem";
-import { PetListFilters } from "./components/PetListFilters/PetListFIlters";
-import { usePetFilters } from "./components/PetListFilters/usePetFilters";
 
 import "./PetList.css";
 
@@ -43,7 +41,6 @@ const PetList = () => {
   return (
     <>
       <h1 className="Pets-title">My Pets</h1>
-      <PetListFilters filters={filters} setFilters={setFilters} />
       <ul className="PetList">
         {data.map((pet) => {
           return (

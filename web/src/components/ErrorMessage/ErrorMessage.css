@@ -1,0 +1,18 @@
+.error-box {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  padding: 1rem;
+  border-radius: 4px;
+
+  border: 1px solid #d32f2f;
+  background: #fdecea;
+  color: #b71c1c;
+}
+
+.error-box > h2 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+}

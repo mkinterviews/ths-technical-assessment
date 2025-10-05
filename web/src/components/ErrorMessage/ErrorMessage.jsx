@@ -7,7 +7,7 @@ export const ErrorMessage = (props) => {
   const error = parseError(props.error);
 
   return (
-    <div role="alert" aria-live="assertive" class="error-box">
+    <div className="error-box" role="alert" aria-live="assertive">
       {title && <h2>{title}</h2>}
       <span>{error}</span>
     </div>

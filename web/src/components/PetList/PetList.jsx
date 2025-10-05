@@ -2,14 +2,19 @@ import React from "react";
 import useSWR from "swr";
 
 import PetItem from "./components/PetItem";
+import { ErrorMessage } from "../ErrorMessage/ErrorMessage";
 
 import "./PetList.css";
 
 const PetList = () => {
-  const { data, isLoading } = useSWR("/api/pets", async (key) => {
+  const { data, isLoading, error } = useSWR("/api/pets", async (key) => {
     const response = await fetch(key);
     return await response.json();
   });
+
+  if (error) {
+    return <ErrorMessage title="Unable to find pets" error={error} />;
+  }
 
   if (isLoading) {
     return (

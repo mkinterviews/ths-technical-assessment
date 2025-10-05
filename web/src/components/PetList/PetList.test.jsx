@@ -36,6 +36,21 @@ test("renders skeleton loading states when request loading", () => {
   expect(getAllByRole("listitem")).toHaveLength(3);
 });
 
+test("renders a generic error when the API fails", () => {
+  useSWR.mockReturnValue({
+    error: new Error("500: Unable to retrieve data"),
+  });
+
+  const { queryByRole, getByRole, debug } = render(<PetList />);
+
+  const petsList = queryByRole("list");
+  expect(petsList).not.toBeInTheDocument();
+
+  expect(getByRole("alert")).toBeInTheDocument();
+  expect(getByRole("heading")).toHaveTextContent(/Unable to find pets/i);
+  expect(getByRole("alert")).toHaveTextContent(/something went wrong/i);
+});
+
 test("renders data in the order retreived by the API", () => {
   useSWR.mockReturnValue({
     data: [

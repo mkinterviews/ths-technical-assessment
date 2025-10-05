@@ -1,7 +1,5 @@
-import React from "react";
-
-import dog from "./assets/PetsPlaceholder/Dog.svg";
 import { Text } from "../../../Text/Text";
+import dog from "./assets/PetsPlaceholder/Dog.svg";
 
 import "./PetItem.css";
 

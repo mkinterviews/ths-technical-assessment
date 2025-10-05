@@ -138,3 +138,19 @@ test("renders data filtered by query and type", async () => {
   expect(petsItems).toHaveLength(1);
   expect(petsItems[0]).toHaveTextContent("Dogbert");
 });
+
+test("renders No pets found when filters don't return any results", async () => {
+  useSWR.mockReturnValue({
+    data: testData,
+  });
+  useQueryStates.mockReturnValue([
+    { q: "someunknownquery", type: "Rock" },
+    vi.fn(),
+  ]);
+
+  const { getByRole } = render(<PetList />);
+
+  const emptyMessage = getByRole("status");
+
+  expect(emptyMessage).toHaveTextContent(/no pets found/i);
+});

@@ -1,6 +1,11 @@
 .Pets-title {
-    font-size: 22px;
-    font-weight: 600;
-    text-align: left;
-    font-family: "Georgia, Times,'Times New Roman', serif";
+  font-size: 22px;
+  font-weight: 600;
+  text-align: left;
+  font-family: "Georgia, Times,'Times New Roman', serif";
+}
+
+.PetList {
+  list-style-type: none;
+  padding: 0;
 }

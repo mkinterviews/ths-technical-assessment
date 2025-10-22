@@ -1,0 +1,10 @@
+.FormField {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.FormField > label {
+  color: rgb(0, 57, 57);
+  font-weight: 600;
+}

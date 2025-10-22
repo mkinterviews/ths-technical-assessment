@@ -3,6 +3,7 @@ import { SWRConfig } from "swr";
 import { createRoot } from "react-dom/client";
 
 import App from "./App";
+import { NuqsAdapter } from "nuqs/adapters/react";
 import { fetcher } from "./utils/fetcher";
 
 import "./index.css";
@@ -17,7 +18,9 @@ setupMocking().then(() => {
   root.render(
     <React.StrictMode>
       <SWRConfig value={{ provider: () => new Map(), fetcher: fetcher }}>
-        <App />
+        <NuqsAdapter>
+          <App />
+        </NuqsAdapter>
       </SWRConfig>
     </React.StrictMode>
   );

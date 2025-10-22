@@ -1,11 +1,16 @@
 import useSWR from "swr";
+import { useQueryState } from "nuqs";
 
 import { ErrorMessage } from "../ErrorMessage/ErrorMessage";
+import { PetFilters } from "./components/PetFilters/PetFilters";
 import PetItem from "./components/PetItem";
 
 import "./PetList.css";
 
 const PetList = () => {
+  const [q] = useQueryState("q");
+  const [type] = useQueryState("type");
+
   const { data, isLoading, error } = useSWR("/api/pets");
 
   if (error) {
@@ -27,12 +32,30 @@ const PetList = () => {
     );
   }
 
-  if (!data) {
+  const filteredData = data
+    ?.filter((pet) => {
+      return !q || pet.name.toLowerCase().includes(q.toLowerCase());
+    })
+    .filter((pet) => {
+      return !type || pet.type === type;
+    })
+    .map((pet) => {
+      return (
+        <li key={pet.id}>
+          <PetItem key={pet.id} pet={pet} />
+        </li>
+      );
+    });
+
+  if (!filteredData || filteredData.length < 1) {
     return (
       <>
         <h1 className="Pets-title">My Pets</h1>
-        <span role="status" aria-live="polite">
-          You don't have any pets registered with us.
+        <PetFilters />
+        <span className="PetList-empty" role="status" aria-live="polite">
+          {!filteredData
+            ? "You don't have any pets registered with us."
+            : "No pets found."}
         </span>
       </>
     );
@@ -41,15 +64,8 @@ const PetList = () => {
   return (
     <>
       <h1 className="Pets-title">My Pets</h1>
-      <ul className="PetList">
-        {data.map((pet) => {
-          return (
-            <li key={pet.id}>
-              <PetItem key={pet.id} pet={pet} />
-            </li>
-          );
-        })}
-      </ul>
+      <PetFilters />
+      <ul className="PetList">{filteredData}</ul>
     </>
   );
 };
